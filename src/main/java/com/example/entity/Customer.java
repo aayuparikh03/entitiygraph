@@ -1,21 +1,26 @@
 package com.example.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
+
 public class Customer {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String name;
     private String city;
 
-    public Customer() {
-    }
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Order> orders;
 
+    public Customer() {}
+
+    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -38,5 +43,13 @@ public class Customer {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }
